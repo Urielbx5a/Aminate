@@ -29,8 +29,10 @@ final public class Scene {
     boolean right = true;
     java.awt.Color Sky = (new Color(49,69,165));
     java.awt.Color Mid = (new Color(242, 99, 34));
+    java.awt.Color MidB = (new Color(242, 99, 34,55));
     java.awt.Color Bot = (new Color(122, 45, 89));
     java.awt.Color Sun = (new Color(254, 200, 4));
+    java.awt.Color SunSet = (new Color(255, 0, 128));
     java.awt.Color Star = (new Color(255, 200, 255));
     java.awt.Color Water = (new Color(24,27,100));
     java.awt.Color Waves = (new Color(49,69,165));
@@ -50,10 +52,55 @@ final public class Scene {
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setSize(1265, 710);
-        frame.setLocation((int) screenSize.getWidth()/25, (int) screenSize.getHeight()/26); //change to fit screens automaticlly 
+        frame.setLocation((int) screenSize.getWidth()/25, (int) screenSize.getHeight()/26); //change to fit screens auto
         moveDot();
     }
-
+    
+    private void moveDot() {
+        while(true){
+            checkBounds();
+            moveLoc();
+            try{
+                Thread.sleep(40);
+            } catch (Exception exc){}
+            frame.repaint();
+        }
+    }
+    
+    private void moveLoc(){
+    	if(up){
+            oneY--;
+        }
+        if(down){
+            oneY++;
+        }
+        if(left){
+            oneX--;
+        }
+        if(right){
+            oneX++;
+        }	
+    }
+    private void checkBounds(){
+    	if(oneX >= 1000){
+            right = false;
+            left = true;
+        }
+        if(oneX <= 300){
+            right = true;
+            left = false;
+        }
+        if(oneY >=420){
+            oneY = 200;
+            oneX= 300;
+        	up = true;
+            down = false;
+        }
+        if(oneY <= 250){
+            up = false;
+            down = true;
+        }	
+    }
     class DrawPanel extends JPanel {
 		/**
 		 * 
@@ -114,7 +161,9 @@ final public class Scene {
         		Mid= (new Color (242,99,34));
         
         	}
-           
+            
+            
+            
             //color- merrigold
             //g.setColor(new Color(254, 200, 4));
             
@@ -130,8 +179,54 @@ final public class Scene {
             else {//start 1
             	Bot = (new Color (122,45,96));
             }
+            //blend
+            g.setColor(MidB);
+            g.fillRect(0, 370,this.getWidth(), 30);
+            if (oneY > 270 && oneY < 350) {//2
+            	MidB = (new Color(241, 86, 14,55));
+            }
+            else if (oneY >= 350 && oneY < 487) {//3
+        		MidB = (new Color (217, 77, 13,55));
+        	}
+            else {//start 1
+        		MidB= (new Color (242,99,34,55));
+        
+        	} 
+          //SunSet shades
+            g.setColor(SunSet);
+            g.fillRect(430, 460,280, 20);
+            if (oneY > 270 && oneY < 350) {//2
+            	SunSet = (new Color(230, 0, 115,100));
+            }
+            else if (oneY >= 350 && oneY < 487) {//3
+        		SunSet = (new Color (204, 0, 102,100));
+        	}
+            else {//start 1
+        		SunSet = (new Color (255, 0, 128,100));
+            }
             
-            
+            g.setColor(SunSet);
+            g.fillRect(460, 440,220, 20);
+            if (oneY > 270 && oneY < 350) {//2
+            	SunSet = (new Color(230, 0, 115,100));
+            }
+            else if (oneY >= 350 && oneY < 487) {//3
+        		SunSet = (new Color (204, 0, 102,100));
+        	}
+            else {//start 1
+        		SunSet = (new Color (255, 0, 128,100));
+            }
+            g.setColor(SunSet);
+            g.fillRect(490, 420,160, 20);
+            if (oneY > 270 && oneY < 350) {//2
+            	SunSet = (new Color(230, 0, 115,100));
+            }
+            else if (oneY >= 350 && oneY < 487) {//3
+        		SunSet = (new Color (204, 0, 102,100));
+        	}
+            else {//start 1
+        		SunSet = (new Color (255, 0, 128,100));
+            }
             // Sun (new Color(254, 200, 4)
             g.setColor(Sun);
             g.fillOval(oneX, oneY, 150, 150); 
@@ -200,55 +295,18 @@ final public class Scene {
         		Waves= (new Color(49,69,165));
         
         	}
-            
-           
+          //fillArc(int xTopLeft, int yTopLeft, int width, int height, int startAngle, int arcAngle)
+            //birds 
+            //g.setColor(new Color(255,255,255));
+           // g.fillArc(800, 200, 50, 10, 130, 150);
+           // g.fillArc(850, 200, 50, 30, 30, 50);
      
         }
     }
 
-    private void moveDot() {
-        while(true){
-            checkBounds();
-            moveLoc();
-            try{
-                Thread.sleep(40);
-            } catch (Exception exc){}
-            frame.repaint();
-        }
-    }
+    
 
-    private void moveLoc(){
-    	if(up){
-            oneY--;
-        }
-        if(down){
-            oneY++;
-        }
-        if(left){
-            oneX--;
-        }
-        if(right){
-            oneX++;
-        }	
-    }
-    private void checkBounds(){
-    	if(oneX >= 1000){
-            right = false;
-            left = true;
-        }
-        if(oneX <= 300){
-            right = true;
-            left = false;
-        }
-        if(oneY >=420){
-            oneY = 200;
-            oneX= 300;
-        	up = true;
-            down = false;
-        }
-        if(oneY <= 250){
-            up = false;
-            down = true;
-        }	
-    }
+    
+    
+
 }
