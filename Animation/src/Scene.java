@@ -2,15 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
-
-
-//Feedback?
-//
-//
-//
-//
-//
-//
 final public class Scene {
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     JFrame frame;
@@ -19,26 +10,40 @@ final public class Scene {
     boolean waveRight = true;
     final private double WAVESPEED = 1;
     final private int WAVEAMT = 20;
-
+    
+    int counter;
+    
     private int oneX = 300; // Starting X coordinate
     private int oneY = 200; // Starting Y coordinate
+    private int twoX = 300; // Starting X coordinate
+    private int twoY = 610; // Starting Y coordinate
     
     boolean up = false;
     boolean down = true;
     boolean left = false;
     boolean right = true;
+    
+    boolean up2 = false;
+    boolean down2=true;
+    boolean left2= false;
+    boolean right2= true;
+    
     java.awt.Color Sky = (new Color(49,69,165));
     java.awt.Color Mid = (new Color(242, 99, 34));
     java.awt.Color MidB = (new Color(242, 99, 34,55));
     java.awt.Color Bot = (new Color(122, 45, 89));
     java.awt.Color Sun = (new Color(254, 200, 4));
+    java.awt.Color SunM = (new Color(254, 200, 4,220));
     java.awt.Color SunSet = (new Color(255, 0, 128));
     java.awt.Color Star = (new Color(255, 200, 255));
     java.awt.Color Water = (new Color(24,27,100));
     java.awt.Color Waves = (new Color(49,69,165));
     Random rand = new Random();
+    
+    
     public static void main(String[] args) {
         new Scene().go();
+        
     }
 
     private void go() {
@@ -51,20 +56,25 @@ final public class Scene {
 
         frame.setVisible(true);
         frame.setResizable(false);
-        frame.setSize(1265, 710);
+        frame.setSize(1265, 710);//710
         frame.setLocation((int) screenSize.getWidth()/25, (int) screenSize.getHeight()/26); //change to fit screens auto
         moveDot();
+        
     }
     
     private void moveDot() {
         while(true){
             checkBounds();
             moveLoc();
+            checkBoundsMirror();
+            moveLocMirror();
             try{
-                Thread.sleep(40);
+                Thread.sleep(30);
             } catch (Exception exc){}
             frame.repaint();
+            
         }
+        
     }
     
     private void moveLoc(){
@@ -90,7 +100,7 @@ final public class Scene {
             right = true;
             left = false;
         }
-        if(oneY >=420){
+        if(oneY >=405){
             oneY = 200;
             oneX= 300;
         	up = true;
@@ -101,6 +111,45 @@ final public class Scene {
             down = true;
         }	
     }
+    
+    
+    private void moveLocMirror(){
+    	if(up2){
+            twoY--;
+        }
+        if(down2){
+            twoY++;
+        }
+        if(left2){
+            twoX--;
+        }
+        if(right2){
+            twoX++;
+            
+        }	
+    }
+    private void checkBoundsMirror(){
+    	if(twoX >= 1000){
+            right2 = false;
+            left2 = true;
+        }
+        if(twoX <= 0){
+            right2 = true;
+            left2 = false;
+        }
+        if(twoY <=800){
+            
+        	up2 = true;
+            down2 = false;
+        }
+        if(twoY <= 405){
+            up2 = false;
+            down2 = true;
+            twoX = 300;
+            twoY = 608;
+        }	
+    }
+    
     class DrawPanel extends JPanel {
 		/**
 		 * 
@@ -190,11 +239,23 @@ final public class Scene {
         	}
             else {//start 1
         		MidB= (new Color (242,99,34,55));
-        
         	} 
+            
+            g.setColor(MidB);
+            g.fillRect(0, 420,this.getWidth(), 20);
+            if (oneY > 270 && oneY < 350) {//2
+            	MidB = (new Color(241, 86, 14,55));
+            }
+            else if (oneY >= 350 && oneY < 487) {//3
+        		MidB = (new Color (217, 77, 13,55));
+        	}
+            else {//start 1
+        		MidB= (new Color (242,99,34,55));
+        	} 
+            
           //SunSet shades
             g.setColor(SunSet);
-            g.fillRect(430, 460,280, 20);
+            g.fillRect(440, 460,280, 20);
             if (oneY > 270 && oneY < 350) {//2
             	SunSet = (new Color(230, 0, 115,100));
             }
@@ -206,7 +267,7 @@ final public class Scene {
             }
             
             g.setColor(SunSet);
-            g.fillRect(460, 440,220, 20);
+            g.fillRect(470, 440,220, 20);
             if (oneY > 270 && oneY < 350) {//2
             	SunSet = (new Color(230, 0, 115,100));
             }
@@ -217,7 +278,7 @@ final public class Scene {
         		SunSet = (new Color (255, 0, 128,100));
             }
             g.setColor(SunSet);
-            g.fillRect(490, 420,160, 20);
+            g.fillRect(500, 420,160, 20);
             if (oneY > 270 && oneY < 350) {//2
             	SunSet = (new Color(230, 0, 115,100));
             }
@@ -240,6 +301,7 @@ final public class Scene {
         		Sun= (new Color (255,224,30));
         
         	}
+            
             
             //g.fillRect(oneX + 2, oneY - 2, 2, 10);
             //g.fillRect(oneX - 2, oneY + 2, 10, 2);
@@ -295,6 +357,21 @@ final public class Scene {
         		Waves= (new Color(49,69,165));
         
         	}
+            
+          //Mirror of Sun in Water
+            g.setColor(SunM);
+            g.fillOval(twoX, twoY, 150, 150); 
+            if (oneY > 270 && oneY < 350) {//2
+            	SunM = (new Color(255, 221, 0,220));
+            }
+            else if (oneY >= 350 && oneY < 487) {//3
+        		SunM = (new Color (255,218,30,220));
+        	}
+            else { //start1 
+        		SunM = (new Color (255,224,30,220));
+        
+        	}
+            
           //fillArc(int xTopLeft, int yTopLeft, int width, int height, int startAngle, int arcAngle)
             //birds 
             //g.setColor(new Color(255,255,255));
